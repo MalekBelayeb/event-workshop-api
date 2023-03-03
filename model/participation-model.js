@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-
-
 const participationSchema = new mongoose.Schema({
 
     user: {
