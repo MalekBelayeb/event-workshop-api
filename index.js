@@ -14,8 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(morgan('common'))
 
 const user = require("./route/user-route")
+const event = require("./route/event-route")
 
 app.use('/api', user)
+app.use('/api', event)
 
 
 app.listen(process.env.PORT, (err) => {

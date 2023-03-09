@@ -3,7 +3,6 @@ const { verifyToken } = require('../middleware/verify-token')
 const { verifyRole } = require('../middleware/verify-role')
 const userController = require('../controller/user-controller')
 
-
 /**
  * as a user i can login  
  */
