@@ -8,29 +8,24 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-
     password: {
         type: String,
         select: false,
         required: true,
     },
-
     firstname: {
         type: String,
         required: true,
     },
-
     lastname: {
         type: String,
         required: true,
     },
-
     role: {
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
     },
-
     isActive: {
         type: Boolean,
         default: true,

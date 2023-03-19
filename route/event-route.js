@@ -8,7 +8,20 @@ const eventController = require('../controller/event-controller')
 /**
  * as a user i can create new event  
  */
-router.post('/v1/event/create', uploadFile(), eventController.createEvent);
+
+router.post('/v1/event/create', uploadFile(), verifyToken, eventController.createEvent);
+
+/**
+ * as a user i can get all events  
+ */
+
+router.get('/v1/events', verifyToken, eventController.getEvents);
+
+/**
+ * as a user i can search for events by title  
+ */
+
+router.get('/v1/events/title/:title', verifyToken, eventController.getEventsByTitle);
 
 
 module.exports = router

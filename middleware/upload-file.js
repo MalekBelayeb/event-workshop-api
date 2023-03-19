@@ -19,8 +19,8 @@ const uploadFile = ({ folder = "./uploads", acceptedTypes = [".jpg", ".png", ".j
             if (!acceptedTypes.includes(path.extname(file.originalname))) {
                 return cb(new Error('Bad file format'));
             }
-
             cb(null, fileName + '-' + Date.now() + path.extname(file.originalname));
+        
         }
 
     })

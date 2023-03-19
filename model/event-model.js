@@ -23,7 +23,10 @@ const eventSchema = new mongoose.Schema({
     cover: {
         type: String,
     },
-
+    organizer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     lat: {
         type: Number,
     },
@@ -34,7 +37,7 @@ const eventSchema = new mongoose.Schema({
 
     isVisible: {
         type: Boolean,
-        required: true,
+        default: false
     },
 
 })

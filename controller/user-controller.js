@@ -1,5 +1,6 @@
 const User = require('../model/user-model')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
 const signupUser = async(req, res) => {
 
@@ -15,7 +16,7 @@ const signupUser = async(req, res) => {
         const newUser = new User({ email, password, firstname, lastname })
         const createdUser = await newUser.save()
 
-        return res.status(200).send({ success: true, user: createdUser })
+        return res.status(200).send({ success: true, message: "Account created successfully, Welcome to our platform", user: createdUser })
 
     } catch (err) {
         console.log(err)
@@ -28,7 +29,6 @@ const signupUser = async(req, res) => {
 const signinUser = async(req, res) => {
 
     try {
-
         let { email, password } = req.body
 
         if (!email || !password) {
@@ -37,6 +37,7 @@ const signinUser = async(req, res) => {
 
         let user = await User.findOne({ email }).select('+password').select('+isActive')
 
+
         if (!user) {
 
             return res.status(404).send({ success: false, message: "Account doesn't exists" })
@@ -44,12 +45,14 @@ const signinUser = async(req, res) => {
         } else {
 
             let isCorrectPassword = await bcrypt.compare(password, user.password)
-
             if (isCorrectPassword) {
 
-                delete user._doc.password
+                delete user._doc.pass
                 if (!user.isActive) return res.status(200).send({ success: false, message: 'Your account is inactive, Please contact your administrator' })
-                return res.status(200).send({ success: true, user })
+
+                const token = jwt.sign({ iduser: user._id, role: user.role }, process.env.SECRET, { expiresIn: "1h", })
+
+                return res.status(200).send({ success: true, user, token })
 
             } else {
 
