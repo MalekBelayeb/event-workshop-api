@@ -47,7 +47,7 @@ const signinUser = async(req, res) => {
             let isCorrectPassword = await bcrypt.compare(password, user.password)
             if (isCorrectPassword) {
 
-                delete user._doc.pass
+                delete user._doc.password
                 if (!user.isActive) return res.status(200).send({ success: false, message: 'Your account is inactive, Please contact your administrator' })
 
                 const token = jwt.sign({ iduser: user._id, role: user.role }, process.env.SECRET, { expiresIn: "1h", })

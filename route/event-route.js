@@ -15,7 +15,21 @@ router.post('/v1/event/create', uploadFile(), verifyToken, eventController.creat
  * as a user i can get all events  
  */
 
-router.get('/v1/events', verifyToken, eventController.getEvents);
+router.get('/v1/events', eventController.getEvents);
+
+/**
+ * as a user i can update event  
+ */
+
+router.put('/v1/event', verifyToken, uploadFile(), eventController.updateEvent);
+
+
+/**
+ * as a user i can update event  
+ */
+
+router.get('/v1/event/:id', verifyToken, eventController.getEventById);
+
 
 /**
  * as a user i can search for events by title  

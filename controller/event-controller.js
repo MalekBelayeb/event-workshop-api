@@ -1,5 +1,5 @@
 const Event = require('../model/event-model')
-
+var ObjectId = require('mongoose').Types.ObjectId;
 
 const createEvent = async(req, res) => {
 
@@ -26,8 +26,8 @@ const getEvents = async(req, res) => {
 
         let { pageSize, page } = req.query
 
-        numPerPage = parseInt(pageSize)
-        pageNumber = parseInt(page)
+        numPerPage = parseInt(pageSize) // 5
+        pageNumber = parseInt(page) // 6
 
         const events = await Event.find().populate('organizer').sort('startDate').limit(numPerPage).skip(pageNumber * numPerPage)
         const total = await Event.find()
@@ -63,5 +63,45 @@ const getEventsByTitle = async(req, res) => {
 
 }
 
+const getEventById = async(req, res) => {
 
-module.exports = { createEvent, getEvents, getEventsByTitle }
+    try {
+
+        let { id } = req.params
+
+        const event = await Event.findById(id).populate('organizer')
+
+        res.status(200).send({ success: true, event })
+
+    } catch (err) {
+
+        console.log(err)
+        res.status(404).send({ success: false, message: err })
+
+    }
+
+}
+
+
+
+
+const updateEvent = async(req, res) => {
+
+    try {
+
+        let { id, title, description, startDate, endDate } = req.body
+        let cover = req.file.filename
+
+        if (!ObjectId.isValid(id)) return res.status(404).send({ success: false, message: "Missing or wrong id format" })
+
+        let updatedEvent = await Event.findOneAndUpdate({ _id: id }, { title, description, startDate, endDate, cover }, { new: true })
+
+        return res.status(200).send({ success: true, updatedEvent })
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ success: false, message: err })
+    }
+}
+
+module.exports = { createEvent, getEvents, getEventsByTitle, updateEvent, getEventById }

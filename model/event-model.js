@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+var fs = require('fs');
 
 const eventSchema = new mongoose.Schema({
 
@@ -41,5 +42,20 @@ const eventSchema = new mongoose.Schema({
     },
 
 })
+
+eventSchema.pre('findOneAndUpdate', async function(next) {
+
+    if (!this._update.cover) return next()
+
+    const docToUpdate = await this.model.findOne(this.getQuery());
+    const pathToFile = `./uploads/${docToUpdate.cover}`
+    if (fs.existsSync(pathToFile)) {
+        fs.unlinkSync(pathToFile)
+    }
+
+    next()
+
+})
+
 
 module.exports = mongoose.model('Event', eventSchema);
